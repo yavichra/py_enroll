@@ -1,25 +1,6 @@
-from tkinter.filedialog import *
+from tkinter import filedialog
 from tkinter import *
 
-
-def Quit(ev):
-    global root
-    root.destroy()
-    
-def LoadFile(ev): 
-    fn = filedialog.askopenfile(root, filetypes = [('*.txt files', '.txt')]).show()
-    if fn == '':
-        return
-    textbox.delete('1.0', 'end') 
-    textbox.insert('1.0', open(fn, 'rt').read())
-    
-def SaveFile(ev):
-    fn = filedialog.asksaveasfile(root, filetypes = [('*.txt files', '.txt')]).show()
-    if fn == '':
-        return
-    if not fn.endswith(".txt"):
-        fn+=".txt"
-    open(fn, 'wt').write(textbox.get('1.0', 'end'))
 
 root = Tk()
 
@@ -41,6 +22,21 @@ scrollbar.pack(side = 'right', fill = 'y')
 loadBtn = Button(panelFrame, text = 'Load')
 saveBtn = Button(panelFrame, text = 'Save')
 quitBtn = Button(panelFrame, text = 'Quit')
+
+def Quit(ev):
+    global root
+    root.destroy()
+    
+def LoadFile(ev): 
+    filename = filedialog.askopenfile(filetypes = [('*.txt files', '.txt')])
+    if filename:
+        textbox.delete('1.0', 'end')
+        textbox.insert('1.0', open(filename.name, 'rt').read())
+
+def SaveFile(ev):
+    filename = filedialog.asksaveasfile(filetypes = [('*.txt files', '.txt')])
+    if filename:
+        open(filename.name, 'wt').write(textbox.get('1.0', 'end'))
 
 loadBtn.bind("<Button-1>", LoadFile)
 saveBtn.bind("<Button-1>", SaveFile)
